@@ -1,16 +1,19 @@
 import os.path
 
+import numpy as np
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
+
 # If modifying these scopes, delete the file token.json.
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 
 
 def main():
+    mons = []
     creds = None
     # The file token.json stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
@@ -50,7 +53,22 @@ def main():
                 return
 
             values.pop(0)
-            print(values)
+            this_gen_mons = []
+            for mon in values:
+                this_gen_mons.append(mon[0])
+
+            repeated = []
+            for mon in this_gen_mons:
+                repeated.extend([mon, mon+" (S)"])
+
+            count = len(repeated)
+            while count % 30 != 0:
+                repeated.append("BLANK")
+                count = len(repeated)
+
+            mons.extend(repeated)
+
+        print(mons)
 
     except HttpError as err:
         print(err)
