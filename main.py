@@ -59,7 +59,7 @@ def main():
 
             repeated = []
             for mon in this_gen_mons:
-                repeated.extend([mon, mon+" (S)"])
+                repeated.extend([mon, "Shiny " + mon])
 
             count = len(repeated)
             while count % 30 != 0:
@@ -68,7 +68,25 @@ def main():
 
             mons.extend(repeated)
 
-        print(mons)
+        search_mon = input("Search for Pokemon: ").title()
+        total_mons = len(mons)
+        layout = np.arange(30).reshape(5, 6)
+
+        for mon in mons:
+            if search_mon in mon:
+                index = mons.index(mon)
+                box = index // 30 + 1
+                remainder = index % 30
+
+                location = np.where(layout == remainder)
+                x, y = location[1][0], location[0][0]
+
+                print(f"{mon} is in box {box}, row {y+1} and column {x+1}")
+                print(f"     BOX {box}")
+                visual = np.zeros((5, 6), int)
+                visual[y, x] = 1
+                print(visual.view())
+                print("\n")
 
     except HttpError as err:
         print(err)
