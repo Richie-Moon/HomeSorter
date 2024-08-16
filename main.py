@@ -112,20 +112,39 @@ def stats():
     print(f"Total excluding shiny-locked: {total-locked}")
     print(f"Total caught: {caught}")
     print(f"Total not caught: {not_caught}")
-    print(f"Percent caught: {round(caught/total*100, 2)}%\n")
+    print(f"Percent caught: {round(caught/(total-locked)*100, 2)}%\n")
 
 
 def update():
+
     pass
+
+def calculate_within_encounters():
+    try:
+        num_encounters = int(input("\nEnter number of encounters: "))
+        rate = int(input("Enter rate: "))
+
+        if num_encounters <= 0 or rate <= 0:
+            raise ValueError
+
+        total: float = 0.0
+        for i in range(1, num_encounters+1):
+            total += 1/rate * (1-1/rate)**(i-1)
+
+        print(f"There is a {round(total*100, 2)}% chance of encountering the shiny after {num_encounters} encounters. \n")
+
+    except ValueError:
+        print("Please enter a valid number.\n")
 
 
 def main():
     try:
         while True:
             print("1. Find Box")
-            print("2. Get count caught")
+            print("2. Get stats")
             print("3. Update data")
-            print("4. Exit")
+            print("4: Calculate chance within encounters")
+            print("5. Exit")
             try:
                 choice = int(input("Choice: "))
             except ValueError:
@@ -139,6 +158,8 @@ def main():
                 case 3:
                     update()
                 case 4:
+                    calculate_within_encounters()
+                case 5:
                     quit()
                 case _:
                     print("Invalid choice\n")
