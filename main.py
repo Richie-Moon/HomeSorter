@@ -122,14 +122,15 @@ def update():
 def calculate_within_encounters():
     try:
         num_encounters = int(input("\nEnter number of encounters: "))
-        rate = int(input("Enter rate: "))
+        rate = 1/int(input("Enter rate: "))
 
         if num_encounters <= 0 or rate <= 0:
             raise ValueError
 
         total: float = 0.0
         for i in range(1, num_encounters+1):
-            total += 1/rate * (1-1/rate)**(i-1)
+
+            total += rate * (1-rate)**(i-1)
 
         print(f"There is a {round(total*100, 2)}% chance of encountering the shiny after {num_encounters} encounters. \n")
 
@@ -165,6 +166,8 @@ def main():
                     print("Invalid choice\n")
     except HttpError as e:
         print(f"HTTPError: {e}")
+    except KeyboardInterrupt:
+        print("\nExiting...")
 
 
 if __name__ == "__main__":
